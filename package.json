@@ -1,0 +1,13 @@
+{
+  "name": "asgard-dashboard-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mockup estático e interactivo de Asgard Dashboard.",
+  "scripts": {
+    "serve": "node tests/static-server.cjs",
+    "test": "node --test tests/demo.test.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.58.2"
+  }
+}

@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Demostración interactiva del dashboard de operaciones Asgard.">
+  <meta name="theme-color" content="#0f172a">
+  <title>Asgard Dashboard — Demo</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%230f172a'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-size='19' font-family='sans-serif' font-weight='700' fill='white'%3EA%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body data-theme="light">
+  <div class="mobile-advice" role="note">
+    Esta demostración se disfruta mejor en una pantalla amplia. La navegación sigue disponible desde el menú.
+  </div>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">A</span>
+        <div>
+          <strong>Asgard</strong>
+          <span>Monitoreo centralizado</span>
+        </div>
+      </div>
+
+      <nav class="primary-nav" aria-label="Navegación principal">
+        <p class="nav-label">Operación</p>
+        <a href="#inicio" data-route="inicio" class="nav-link active"><span class="nav-icon" aria-hidden="true">⌂</span>Inicio</a>
+        <a href="#ejecuciones" data-route="ejecuciones" class="nav-link"><span class="nav-icon" aria-hidden="true">▶</span>Ejecuciones</a>
+        <a href="#migraciones" data-route="migraciones" class="nav-link"><span class="nav-icon" aria-hidden="true">⇅</span>Migraciones</a>
+        <a href="#alertas" data-route="alertas" class="nav-link"><span class="nav-icon" aria-hidden="true">♢</span>Alertas</a>
+        <a href="#monitoreo" data-route="monitoreo" class="nav-link"><span class="nav-icon" aria-hidden="true">›_</span>Monitoreo SQL</a>
+        <a href="#report-server" data-route="report-server" class="nav-link"><span class="nav-icon" aria-hidden="true">▥</span>Report Server</a>
+        <p class="nav-label">Administración</p>
+        <a href="#usuarios" data-route="usuarios" class="nav-link"><span class="nav-icon" aria-hidden="true">♙</span>Identidades</a>
+        <a href="#catalogo" data-route="catalogo" class="nav-link"><span class="nav-icon" aria-hidden="true">▤</span>Catálogo ETL</a>
+        <a href="#catalogo-objetos" data-route="catalogo-objetos" class="nav-link"><span class="nav-icon" aria-hidden="true">◇</span>Catálogo de objetos</a>
+        <a href="#configuracion" data-route="configuracion" class="nav-link"><span class="nav-icon" aria-hidden="true">⚙</span>Configuración</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div><span class="connection-indicator" aria-hidden="true"></span>Escenario simulado</div>
+        <div>Operador demo</div>
+        <time id="sidebarClock">09:42</time>
+      </div>
+    </aside>
+
+    <div class="workspace">
+      <header class="topbar">
+        <button class="menu-button" id="menuButton" type="button" aria-label="Mostrar menú" aria-controls="sidebar" aria-expanded="false">☰</button>
+        <div class="demo-context">
+          <strong>Entorno DEMO</strong>
+          <span>Datos ficticios · Sin conexión a servicios</span>
+        </div>
+        <div class="topbar-actions" id="demoActions">
+          <button type="button" id="tutorialButton">Ver tutorial</button>
+          <button type="button" class="icon-button notification-button" id="notificationButton" aria-label="Notificaciones sin revisar" aria-expanded="false" aria-controls="notificationPanel">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>
+            <span class="notification-dot" id="notificationDot"></span>
+          </button>
+          <button type="button" class="icon-button" id="themeButton" aria-label="Preferencias: tema Blanco" title="Preferencias">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-1.6v-.2h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/></svg>
+          </button>
+          <button type="button" id="resetButton">Reiniciar demo</button>
+        </div>
+      </header>
+
+      <main id="mainContent" tabindex="-1"></main>
+    </div>
+  </div>
+
+  <aside class="notification-panel" id="notificationPanel" role="dialog" aria-labelledby="notificationTitle" aria-hidden="true">
+    <div class="notification-panel-head">
+      <div>
+        <h3 id="notificationTitle">Notificaciones</h3>
+        <p>Actividad del escenario de demostración</p>
+      </div>
+      <div class="notification-head-actions">
+        <button type="button" class="notification-icon-button" id="toggleNotificationFilters" aria-label="Mostrar filtros" aria-controls="notificationTools" aria-expanded="false" title="Mostrar filtros">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-1.6v-.2h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0 .3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/></svg>
+        </button>
+        <button type="button" class="notification-icon-button" id="closeNotifications" aria-label="Cerrar notificaciones" title="Cerrar">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="notification-tools" id="notificationTools" hidden>
+      <select id="notificationCategory" aria-label="Filtrar notificaciones por categoría">
+        <option value="ALL">Todas las categorías</option>
+        <option value="ETL">ETL</option>
+        <option value="MIGRATION">Migraciones</option>
+        <option value="DATABASE">Base de datos</option>
+        <option value="CATALOG">Catálogo</option>
+        <option value="ALERT">Alertas</option>
+        <option value="SYSTEM">Sistema</option>
+      </select>
+      <select id="notificationSeverity" aria-label="Filtrar notificaciones por severidad">
+          <option value="ALL">Todas las severidades</option>
+          <option value="ERROR">Errores</option>
+          <option value="WARNING">Advertencias</option>
+          <option value="INFO">Informativas</option>
+      </select>
+      <button type="button" id="resetNotificationFilters">Restablecer</button>
+    </div>
+    <div class="notification-state" id="notificationState" role="status" aria-live="polite"></div>
+    <div class="notification-list" id="notificationList"></div>
+  </aside>
+
+  <div class="modal-backdrop" id="dialogBackdrop" hidden>
+    <section class="dialog" id="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
+      <div class="dialog-heading">
+        <h2 id="dialogTitle">Confirmar acción</h2>
+        <button type="button" data-dialog-close aria-label="Cerrar">Cerrar</button>
+      </div>
+      <div id="dialogBody"></div>
+    </section>
+  </div>
+
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-label="Avisos"></div>
+
+  <div class="tour-layer" id="tourLayer" hidden>
+    <div class="tour-shade"></div>
+  </div>
+  <section class="tour-card" id="tourCard" role="dialog" aria-modal="true" aria-labelledby="tourTitle" aria-describedby="tourBody" hidden>
+    <div class="tour-progress" id="tourProgress">Paso 1 de 8</div>
+    <h2 id="tourTitle"></h2>
+    <p id="tourBody"></p>
+    <p class="tour-instruction" id="tourInstruction" hidden></p>
+    <div class="tour-actions">
+      <button type="button" id="tourExit">Salir</button>
+      <span></span>
+      <button type="button" id="tourPrevious">Anterior</button>
+      <button type="button" class="primary" id="tourNext">Siguiente</button>
+    </div>
+  </section>
+
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>
